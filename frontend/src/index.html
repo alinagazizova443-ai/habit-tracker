@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Верхняя навигация (вместо шапки) -->
+        <!-- Верхняя навигация -->
         <div class="top-nav">
             <div class="nav-item active" onclick="switchTab('profile', event)">
                 <span class="nav-icon">👤</span>
@@ -27,8 +27,12 @@
                 <span class="nav-icon">📊</span>
                 <span class="nav-text">Статистика</span>
             </div>
+            <div class="nav-item" onclick="switchTab('settings', event)">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Настройки</span>
+            </div>
         </div>
-<div class="app-container">
+
         <div class="app-content" id="app-content">
             <!-- Вкладка Профиль -->
             <div class="tab active" id="profile-tab">
@@ -67,7 +71,7 @@
                 </div>
 
                 <div class="form-group">
-                    <textarea id="note-content" placeholder="Текст заметки..." onkeydown="handleTextareaKeydown(event)" style="font-size: calc(100vw/29);"></textarea>
+                    <textarea id="note-content" placeholder="Текст заметки..." onkeydown="handleTextareaKeydown(event)"></textarea>
                 </div>
 
                 <div class="list-type-selector">
@@ -85,8 +89,8 @@
             <!-- Вкладка Привычки -->
             <div class="tab" id="habits-tab">
                 <div style="margin-bottom: clamp(15px, 3vh, 20px);">
-                    <h2 style="font-size: clamp(20px, 6vw, 24vw); color: #333;">Сегодня</h2>
-                    <p style="color: #666; font-size: clamp(14px, 4vw, 16vw);" id="current-date"></p>
+                    <h2 style="font-size: clamp(20px, 6vw, 24px); color: var(--text-primary);">Сегодня</h2>
+                    <p style="color: var(--text-secondary); font-size: clamp(14px, 4vw, 16px);" id="current-date"></p>
                 </div>
 
                 <div class="habits-list" id="habits-list">
@@ -98,17 +102,21 @@
 
             <!-- Вкладка Статистика -->
             <div class="tab" id="stats-tab">
-                <div class="stats-grid" id="stats-grid">
+                <div id="stats-grid">
                     <!-- Статистика будет загружаться сюда -->
                 </div>
 
                 <div class="date-picker">
                     <label>Выберите день</label>
-                    <input type="date" id="stats-date" onchange="loadDayNotes()">
+                    <input type="date" id="stats-date" onchange="loadDayStats(); loadDayNotes();">
+                </div>
+
+                <div id="day-stats" class="stats-grid">
+                    <!-- Статистика привычек за день будет загружаться сюда -->
                 </div>
 
                 <div class="day-notes">
-                    <h3 style="margin-bottom: clamp(5px, 1.5vh, 10px); font-size: clamp(16px, 4vw, 18vw);" id="selected-day-title">Заметки за день</h3>
+                    <h3 style="margin-bottom: clamp(5px, 1.5vh, 10px); font-size: clamp(16px, 4vw, 18px); color: var(--text-primary);" id="selected-day-title">Заметки за день</h3>
                     <div id="day-notes-list">
                         <!-- Заметки за выбранный день -->
                     </div>
@@ -117,6 +125,29 @@
                         <input type="text" id="new-day-note" placeholder="Новая заметка за этот день...">
                     </div>
                     <button onclick="addDayNote()">Добавить заметку</button>
+                </div>
+            </div>
+
+            <!-- Вкладка Настройки -->
+            <div class="tab" id="settings-tab">
+                <div style="margin-bottom: clamp(20px, 4vh, 30px);">
+                    <h2 style="font-size: clamp(20px, 6vw, 24px); color: var(--text-primary); margin-bottom: clamp(15px, 3vh, 20px);">Настройки</h2>
+                    
+                    <div class="settings-item">
+                        <span>Темная тема</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin-top: clamp(30px, 5vh, 40px);">
+                    <h3 style="font-size: clamp(16px, 5vw, 18px); color: var(--text-primary); margin-bottom: clamp(10px, 2vh, 15px);">О приложении</h3>
+                    <p style="color: var(--text-secondary); font-size: clamp(14px, 4vw, 16px); line-height: 1.5;">
+                        Трекер привычек v1.0<br>
+                        Помогает отслеживать ваши ежедневные привычки и прогресс
+                    </p>
                 </div>
             </div>
         </div>
