@@ -1,0 +1,119 @@
+<div class="app-container">
+        <!-- Верхняя навигация (вместо шапки) -->
+        <div class="top-nav">
+            <div class="nav-item active" onclick="switchTab('profile', event)">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Профиль</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('notes', event)">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">Заметки</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('habits', event)">
+                <span class="nav-icon">✓</span>
+                <span class="nav-text">Привычки</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('stats', event)">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Статистика</span>
+            </div>
+        </div>
+<div class="app-container">
+        <!-- Шапка 
+        <div class="app-header" id="app-header">
+            Профиль
+        </div>
+
+        <!-- Контент -->
+        <div class="app-content" id="app-content">
+            <!-- Вкладка Профиль -->
+            <div class="tab active" id="profile-tab">
+                <div class="avatar-section">
+                    <div class="avatar-container">
+                        <div class="avatar" id="avatar-preview" onclick="document.getElementById('avatar-upload').click()">
+                            <div class="avatar-placeholder">👤</div>
+                        </div>
+                        <input type="file" id="avatar-upload" accept="image/*" onchange="handleAvatarUpload(event)">
+                        <button class="change-photo-btn" onclick="document.getElementById('avatar-upload').click()">Изменить фото</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Имя пользователя</label>
+                    <input type="text" id="username" placeholder="Введите имя пользователя" value="Анна Петрова">
+                </div>
+
+                <div class="form-group">
+                    <label>О себе</label>
+                    <textarea id="bio" placeholder="Расскажите о себе...">Люблю спорт, чтение и саморазвитие</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>День рождения</label>
+                    <input type="date" id="birthdate" value="1995-05-15">
+                </div>
+
+                <button onclick="saveProfile()">Сохранить изменения</button>
+            </div>
+
+            <!-- Вкладка Заметки -->
+            <div class="tab" id="notes-tab">
+                <div class="form-group">
+                    <input type="text" id="note-title" placeholder="Заголовок">
+                </div>
+
+                <div class="form-group">
+                    <textarea id="note-content" placeholder="Текст заметки..." onkeydown="handleTextareaKeydown(event)" style="font-size: calc(100vw/29);"></textarea>
+                </div>
+
+                <div class="list-type-selector">
+                    <button class="list-type-btn" onclick="toggleListType('bulleted')" id="bulleted-btn">• Маркированный</button>
+                    <button class="list-type-btn" onclick="toggleListType('numbered')" id="numbered-btn">1. Нумерованный</button>
+                </div>
+
+                <button onclick="addNote()" id="add-note-btn" style="margin-top: 40px; margin-bottom: 40px;">Добавить заметку</button>
+
+                <div class="notes-list" id="notes-list">
+                    <!-- Заметки будут добавляться сюда -->
+                </div>
+            </div>
+
+            <!-- Вкладка Привычки -->
+            <div class="tab" id="habits-tab">
+                <div style="margin-bottom: clamp(15px, 3vh, 20px);">
+                    <h2 style="font-size: clamp(20px, 6vw, 24vw); color: #333;">Сегодня</h2>
+                    <p style="color: #666; font-size: clamp(14px, 4vw, 16vw);" id="current-date"></p>
+                </div>
+
+                <div class="habits-list" id="habits-list">
+                    <!-- Привычки будут загружаться сюда -->
+                </div>
+
+                <button onclick="saveHabits()" style="margin-top: clamp(15px, 3vh, 20px);">Сохранить прогресс</button>
+            </div>
+
+            <!-- Вкладка Статистика -->
+            <div class="tab" id="stats-tab">
+                <div class="stats-grid" id="stats-grid">
+                    <!-- Статистика будет загружаться сюда -->
+                </div>
+
+                <div class="date-picker">
+                    <label>Выберите день</label>
+                    <input type="date" id="stats-date" onchange="loadDayNotes()">
+                </div>
+
+                <div class="day-notes">
+                    <h3 style="margin-bottom: clamp(5px, 1.5vh, 10px); font-size: clamp(16px, 4vw, 18vw);" id="selected-day-title">Заметки за день</h3>
+                    <div id="day-notes-list">
+                        <!-- Заметки за выбранный день -->
+                    </div>
+
+                    <div class="form-group" style="margin-top: clamp(10px, 2.5vh, 15px);">
+                        <input type="text" id="new-day-note" placeholder="Новая заметка за этот день...">
+                    </div>
+                    <button onclick="addDayNote()">Добавить заметку</button>
+                </div>
+            </div>
+        </div>
+    </div>
