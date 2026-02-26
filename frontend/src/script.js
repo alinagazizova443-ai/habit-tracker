@@ -549,25 +549,42 @@ function addDayNote() {
 
 // ============ НАСТРОЙКИ ============
 function toggleTheme() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'dark');
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    // Применяем новую тему
+    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    // Сохраняем в localStorage
+    localStorage.setItem('theme', newTheme);
+    
+    // Обновляем текст и иконку на кнопке
+    updateThemeButton(newTheme);
+}
+
+function updateThemeButton(theme) {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (!themeBtn) return;
+    
+    const icon = themeBtn.querySelector('.theme-icon');
+    const text = themeBtn.querySelector('.theme-text');
+    
+    if (theme === 'dark') {
+        icon.textContent = '☀️';
+        text.textContent = 'Выключить';
     } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
+        icon.textContent = '🌙';
+        text.textContent = 'Включить';
     }
 }
 
 function loadTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.checked = savedTheme === 'dark';
-    }
+    
+    // Обновляем кнопку в соответствии с сохраненной темой
+    updateThemeButton(savedTheme);
 }
-
 // ============ ИНИЦИАЛИЗАЦИЯ ============
 document.addEventListener('DOMContentLoaded', function() {
     // Загружаем тему
