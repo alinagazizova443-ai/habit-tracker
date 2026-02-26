@@ -65,12 +65,6 @@ function switchTab(tabName, event) {
         loadDayNotes();
     } else if (tabName === 'notes') {
         displayNotes();
-    } else if (tabName === 'settings') {
-        // При открытии настроек проверяем состояние переключателя
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            themeToggle.checked = document.documentElement.getAttribute('data-theme') === 'dark';
-        }
     }
 }
 
@@ -412,9 +406,6 @@ function saveHabitsToHistory(date) {
     habits.forEach(habit => {
         habitsHistory[date][habit.id] = habit.current;
     });
-    
-    // Сохраняем в localStorage
-    localStorage.setItem('habitsHistory', JSON.stringify(habitsHistory));
 }
 
 function loadHabitsFromHistory(date) {
@@ -450,33 +441,30 @@ function loadDayStats() {
     const selectedDate = document.getElementById('stats-date').value;
     if (!selectedDate) return;
 
-    const dayStatsContainer = document.getElementById('day-stats');
-    if (!dayStatsContainer) return;
-    
-    // Загружаем значения привычек для выбранной даты из истории
-    let dayStats = {};
+    // Загружаем значения привычек для выбранной даты
     if (habitsHistory[selectedDate]) {
-        dayStats = habitsHistory[selectedDate];
+        habits.forEach(habit => {
+            if (habitsHistory[selectedDate][habit.id] !== undefined) {
+                habit.current = habitsHistory[selectedDate][habit.id];
+            }
+        });
     }
 
-    dayStatsContainer.innerHTML = habits.map(habit => {
-        const dayValue = dayStats[habit.id] !== undefined ? dayStats[habit.id] : 0;
-        
-        return `
-            <div class="habit-stat-card">
-                <div class="habit-name">${habit.name}</div>
-                <div class="habit-value" id="stat-value-${habit.id}">${dayValue} ${habit.unit}</div>
-                <div class="habit-target">Цель: ${habit.target}</div>
-                <div class="habit-stat-controls">
-                    <input type="number" id="stat-input-${habit.id}" value="${dayValue}" step="${habit.step}" min="0">
-                    <div style="display: flex; gap: 5px;">
-                        <button class="habit-btn decrement-btn" onclick="adjustDayHabit(${habit.id}, -${habit.step})">−</button>
-                        <button class="habit-btn increment-btn" onclick="adjustDayHabit(${habit.id}, ${habit.step})">+</button>
-                    </div>
+    const dayStatsContainer = document.getElementById('day-stats');
+    dayStatsContainer.innerHTML = habits.map(habit => `
+        <div class="habit-stat-card">
+            <div class="habit-name">${habit.name}</div>
+            <div class="habit-value" id="stat-value-${habit.id}">${habit.current} ${habit.unit}</div>
+            <div class="habit-target">Цель: ${habit.target}</div>
+            <div class="habit-stat-controls">
+                <input type="number" id="stat-input-${habit.id}" value="${habit.current}" step="${habit.step}" min="0">
+                <div style="display: flex; gap: 5px;">
+                    <button class="habit-btn decrement-btn" onclick="adjustDayHabit(${habit.id}, -${habit.step})">−</button>
+                    <button class="habit-btn increment-btn" onclick="adjustDayHabit(${habit.id}, ${habit.step})">+</button>
                 </div>
             </div>
-        `;
-    }).join('');
+        </div>
+    `).join('');
 }
 
 function adjustDayHabit(habitId, change) {
@@ -491,9 +479,9 @@ function adjustDayHabit(habitId, change) {
         } else {
             newValue = Math.round(newValue);
         }
-        
+        habit.current = newValue;
         input.value = newValue;
-        valueSpan.textContent = `${newValue} ${habit.unit}`;
+        valueSpan.textContent = `${habit.current} ${habit.unit}`;
         
         // Сохраняем в историю
         const selectedDate = document.getElementById('stats-date').value;
@@ -502,9 +490,6 @@ function adjustDayHabit(habitId, change) {
                 habitsHistory[selectedDate] = {};
             }
             habitsHistory[selectedDate][habitId] = newValue;
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('habitsHistory', JSON.stringify(habitsHistory));
         }
     }
 }
@@ -564,18 +549,19 @@ function addDayNote() {
 
 // ============ НАСТРОЙКИ ============
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
 }
 
 function loadTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
-    // Устанавливаем состояние переключателя
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.checked = savedTheme === 'dark';
@@ -624,12 +610,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Устанавливаем сегодняшнюю дату в календарь статистики
     const today = new Date().toISOString().split('T')[0];
-    const statsDate = document.getElementById('stats-date');
-    if (statsDate) {
-        statsDate.value = today;
-        loadDayStats();
-        loadDayNotes();
-    }
+    document.getElementById('stats-date').value = today;
+    loadDayStats();
+    loadDayNotes();
 });
 
 // Сохраняем историю привычек при закрытии
