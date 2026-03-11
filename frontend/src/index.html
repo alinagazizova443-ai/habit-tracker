@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Трекер привычек</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="/public/manifest.json">
-</head>
-<body>
-    <div class="app-container">
-        <!-- Верхняя навигация -->
+<div class="app-container">
+        <!-- Верхняя навигация (вместо шапки) -->
         <div class="top-nav">
             <div class="nav-item active" onclick="switchTab('profile', event)">
                 <span class="nav-icon">👤</span>
@@ -32,7 +22,7 @@
                 <span class="nav-text">Настройки</span>
             </div>
         </div>
-
+<div class="app-container">
         <div class="app-content" id="app-content">
             <!-- Вкладка Профиль -->
             <div class="tab active" id="profile-tab">
@@ -61,7 +51,7 @@
                     <input type="date" id="birthdate" value="1995-05-15">
                 </div>
 
-                <button onclick="saveProfile()">Сохранить изменения</button>
+                <button onclick="saveProfile()" style="margin-bottom: calc(100vw/24);">Сохранить изменения</button>
             </div>
 
             <!-- Вкладка Заметки -->
@@ -71,7 +61,7 @@
                 </div>
 
                 <div class="form-group">
-                    <textarea id="note-content" placeholder="Текст заметки..." onkeydown="handleTextareaKeydown(event)"></textarea>
+                    <textarea id="note-content" placeholder="Текст заметки..." onkeydown="handleTextareaKeydown(event)" style="font-size: calc(100vw/29);"></textarea>
                 </div>
 
                 <div class="list-type-selector">
@@ -85,38 +75,43 @@
                     <!-- Заметки будут добавляться сюда -->
                 </div>
             </div>
-
             <!-- Вкладка Привычки -->
             <div class="tab" id="habits-tab">
                 <div style="margin-bottom: clamp(15px, 3vh, 20px);">
-                    <h2 style="font-size: clamp(20px, 6vw, 24px); color: var(--text-primary);">Сегодня</h2>
-                    <p style="color: var(--text-secondary); font-size: clamp(14px, 4vw, 16px);" id="current-date"></p>
+                    <h2>Сегодня</h2>
+                    <p id="current-date"></p>
                 </div>
 
                 <div class="habits-list" id="habits-list">
                     <!-- Привычки будут загружаться сюда -->
                 </div>
 
-                <button onclick="saveHabits()" style="margin-top: clamp(15px, 3vh, 20px);">Сохранить прогресс</button>
+                <button onclick="saveHabits()" style="margin: calc(100vw/24) 0 calc(100vw/24) 0;">Сохранить прогресс</button>
             </div>
-
             <!-- Вкладка Статистика -->
             <div class="tab" id="stats-tab">
-                <div id="stats-grid">
-                    <!-- Статистика будет загружаться сюда -->
+                <div class="stats-header" style="display: flex; flex-direction: row; justify-content: space-between; gap: 10px;">
+                    <div class="stat-card">
+                        <div class="stat-value" id="streak-value">7</div>
+                        <div class="stat-label">дней подряд</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-habits-value">5</div>
+                        <div class="stat-label">всего привычек</div>
+                    </div>
                 </div>
 
                 <div class="date-picker">
                     <label>Выберите день</label>
-                    <input type="date" id="stats-date" onchange="loadDayStats(); loadDayNotes();">
+                    <input type="date" id="stats-date" onchange="loadDayStats()">
                 </div>
 
-                <div id="day-stats" class="stats-grid">
-                    <!-- Статистика привычек за день будет загружаться сюда -->
+                <div class="daily-habits-stats" id="daily-habits-stats">
+                    <!-- Статистика привычек за выбранный день -->
                 </div>
 
                 <div class="day-notes">
-                    <h3 style="margin-bottom: clamp(5px, 1.5vh, 10px); font-size: clamp(16px, 4vw, 18px); color: var(--text-primary);" id="selected-day-title">Заметки за день</h3>
+                    <h3 id="selected-day-title">Заметки за день</h3>
                     <div id="day-notes-list">
                         <!-- Заметки за выбранный день -->
                     </div>
@@ -124,34 +119,34 @@
                     <div class="form-group" style="margin-top: clamp(10px, 2.5vh, 15px);">
                         <input type="text" id="new-day-note" placeholder="Новая заметка за этот день...">
                     </div>
-                    <button onclick="addDayNote()">Добавить заметку</button>
+                    <button onclick="addDayNote()" style="margin-bottom: calc(100vw/24);">Добавить заметку</button>
                 </div>
             </div>
+          <!-- Вкладка Настройки -->
+          <div class="tab" id="settings-tab">
+              <h2>Настройки</h2>
 
-            <!-- Вкладка Настройки -->
-            <div class="tab" id="settings-tab">
-                <div style="margin-bottom: clamp(20px, 4vh, 30px);">
-                    <h2 style="font-size: clamp(20px, 6vw, 24px); color: var(--text-primary); margin-bottom: clamp(15px, 3vh, 20px);">Настройки</h2>
-                    
-                    <div class="settings-item">
-                        <span>Темная тема</span>
-                        <button onclick="toggleTheme()" id="theme-toggle-btn" class="theme-toggle-btn">
-                            <span class="theme-icon">🌙</span>
-                            <span class="theme-text">Включить</span>
-                        </button>
-                    </div>
-                </div>
+              <div class="settings-section">
+                  <h3 style="font-size: clamp(16px, 3.5vw, 18vw); color: #333; margin-bottom: 15px;">Тема оформления</h3>
 
-                <div style="margin-top: clamp(30px, 5vh, 40px);">
-                    <h3 style="font-size: clamp(16px, 5vw, 18px); color: var(--text-primary); margin-bottom: clamp(10px, 2vh, 15px);">О приложении</h3>
-                    <p style="color: var(--text-secondary); font-size: clamp(14px, 4vw, 16px); line-height: 1.5;">
-                        Трекер привычек v1.0<br>
-                        Помогает отслеживать ваши ежедневные привычки и прогресс
-                    </p>
-                </div>
-            </div>
+                  <div class="theme-selector">
+                      <button class="theme-btn light-theme-btn active" onclick="changeTheme('light')">
+                          <span class="theme-icon">☀️</span>
+                          <span class="theme-label">Светлая</span>
+                      </button>
+
+                      <button class="theme-btn dark-theme-btn" onclick="changeTheme('dark')">
+                          <span class="theme-icon">🌙</span>
+                          <span class="theme-label" style="color: white;">Темная</span>
+                      </button>
+                  </div>
+              </div>
+
+              <div class="settings-section">
+                  <h3 style="font-size: clamp(16px, 3.5vw, 18vw); color: #333; margin-bottom: 15px;">О приложении</h3>
+                  <p style="color: #666; line-height: 1.5;">Версия 1.0.0</p>
+                  <p style="color: #666; line-height: 1.5;">Трекер привычек помогает отслеживать ежедневные цели и прогресс</p>
+              </div>
+          </div>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
