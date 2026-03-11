@@ -593,7 +593,7 @@
             padding: clamp(8px, 2vh, 10vh);
             background-color: var(--card-bg);
             border-radius: clamp(6px, 1.5vw, 8vh);
-            margin-bottom: clamp(5px, 1.5vh, 8vh);
+            margin: calc(100vw/24) 0 calc(100vw/24) 0;
             border: 1px solid var(--border-color);
         }
 
