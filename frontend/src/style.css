@@ -584,6 +584,7 @@
         .daily-habit-value {
           display: flex;
           flex-direction: row;
+          margin-top: calc(100vw / 90);
         }
 
         .day-note-item {
